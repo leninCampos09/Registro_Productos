@@ -33,7 +33,7 @@ namespace Registro_Productos
             LoadProducts();
         }
 
-        private void LoadCategories()
+        public void LoadCategories()
         {
             try
             {

@@ -48,7 +48,7 @@ namespace Registro_Productos
             txtSearch.TextChanged += (s, e) => LoadCategories();
         }
 
-        private void LoadCategories()
+        public void LoadCategories()
         {
             var dt = Database.GetAllCategories();
             if (dt == null) dt = new DataTable();
