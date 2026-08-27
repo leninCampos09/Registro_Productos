@@ -10,7 +10,7 @@ namespace Registro_Productos
         private Button btnSave;
         private Label lblNombre;
         private Label lblTitle;
-        private Panel pnlButtons;
+        private System.Windows.Forms.FlowLayoutPanel pnlButtons;
         private int editingId = 0;
 
         public CategoryEditForm(int id = 0, string nombre = null)
@@ -31,9 +31,18 @@ namespace Registro_Productos
             lblNombre = new Label { Text = "Nombre", AutoSize = true, Location = new Point(12, 36), Name = "lblNombre" };
             txtName = new TextBox { Location = new Point(12, 60), Width = 340, Name = "txtName" };
 
-            // panel inferior para botones (se reposiciona cuando la ventana está maximizada)
-            pnlButtons = new Panel { Dock = DockStyle.Bottom, Height = 56, Padding = new Padding(12, 8, 12, 8) };
-            btnSave = new Button { Text = "Guardar", Size = new Size(100, 30), Location = new Point(0, 8), Name = "btnSave", Anchor = AnchorStyles.Left | AnchorStyles.Bottom };
+            // panel inferior para botones (alineado a la derecha)
+            pnlButtons = new System.Windows.Forms.FlowLayoutPanel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 56,
+                Padding = new Padding(12, 8, 12, 8),
+                FlowDirection = FlowDirection.RightToLeft,
+                WrapContents = false,
+                AutoSize = false
+            };
+            btnSave = new Button { Text = "Guardar", Size = new Size(100, 30), Name = "btnSave" };
+            btnSave.Margin = new Padding(6, 8, 6, 8);
             btnSave.Click += BtnSave_Click;
             pnlButtons.Controls.Add(btnSave);
 
