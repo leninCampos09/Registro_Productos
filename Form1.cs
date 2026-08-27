@@ -35,6 +35,18 @@ namespace Registro_Productos
                 tpProducts.Controls.Add(prodForm);
                 tpCategories.Controls.Add(catForm);
 
+                // Recargar categorías al cambiar de pestaña para asegurar que los combos siempre tengan datos
+                adminTabs.SelectedIndexChanged += (s, e) => {
+                    try
+                    {
+                        if (adminTabs.SelectedIndex == 0)
+                            prodForm.LoadCategories();
+                        else
+                            catForm.LoadCategories();
+                    }
+                    catch { }
+                };
+
                 this.tabPageAdmin.Controls.Add(adminTabs);
 
                 prodForm.Show();

@@ -269,13 +269,13 @@
             this.tlpMain.Controls.Add(this.cboCategoria, 1, 2);
             this.tlpMain.Controls.Add(this.lbPrecio, 0, 3);
             this.tlpMain.Controls.Add(this.txtPrecio, 1, 3);
-            this.tlpMain.Controls.Add(this.lbCantidad, 0, 3);
-            this.tlpMain.Controls.Add(this.txtCantidad, 1, 3);
-            this.tlpMain.Controls.Add(this.lbDisponible, 0, 4);
-            this.tlpMain.Controls.Add(this.rbDisponible, 1, 4);
+            this.tlpMain.Controls.Add(this.lbCantidad, 0, 4);
+            this.tlpMain.Controls.Add(this.txtCantidad, 1, 4);
+            this.tlpMain.Controls.Add(this.lbDisponible, 0, 5);
+            this.tlpMain.Controls.Add(this.rbDisponible, 1, 5);
             // Add image controls into a flow panel and then to layout
             this.flpImage.Controls.Add(this.pbImage);
-            this.tlpMain.Controls.Add(this.flpImage, 1, 5);
+            this.tlpMain.Controls.Add(this.flpImage, 1, 6);
             // Add guardar button below layout and a botón para ver productos
             this.pnlActions = new System.Windows.Forms.FlowLayoutPanel();
             this.pnlActions.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
@@ -300,8 +300,8 @@
             this.pnlActions.Controls.Add(this.btnVer);
             this.pnlActions.Controls.Add(this.btnCategorias);
 
-            this.tlpMain.Controls.Add(this.pnlActions, 0, 6);
-            this.tlpMain.Controls.Add(this.btnGuardar, 1, 6);
+            this.tlpMain.Controls.Add(this.pnlActions, 0, 7);
+            this.tlpMain.Controls.Add(this.btnGuardar, 1, 7);
             this.ResumeLayout(false);
         }
 
