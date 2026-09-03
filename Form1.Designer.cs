@@ -72,6 +72,22 @@
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPageProduct = new System.Windows.Forms.TabPage();
             this.tabPageAdmin = new System.Windows.Forms.TabPage();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.registrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ventasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proveedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.categoriasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.informesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonRegistros = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonVentas = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonStock = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonProveedores = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCompras = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCategorias = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonInformes = new System.Windows.Forms.ToolStripButton();
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Location = new System.Drawing.Point(0, 0);
             this.tabMain.Name = "tabMain";
@@ -84,6 +100,158 @@
             this.tabPageAdmin.UseVisualStyleBackColor = true;
             this.tabMain.Controls.Add(this.tabPageProduct);
             this.tabMain.Controls.Add(this.tabPageAdmin);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrosToolStripMenuItem,
+            this.informesToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // registrosToolStripMenuItem
+            // 
+            this.registrosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ventasToolStripMenuItem,
+            this.stockToolStripMenuItem,
+            this.proveedoresToolStripMenuItem,
+            this.comprasToolStripMenuItem,
+            this.categoriasToolStripMenuItem});
+            this.registrosToolStripMenuItem.Name = "registrosToolStripMenuItem";
+            this.registrosToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            // 
+            // comprasToolStripMenuItem
+            // 
+            this.comprasToolStripMenuItem.Name = "comprasToolStripMenuItem";
+            this.comprasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.comprasToolStripMenuItem.Text = "Compras";
+            this.comprasToolStripMenuItem.Click += new System.EventHandler(this.menuCompras_Click);
+            this.registrosToolStripMenuItem.Text = "Registros";
+            // 
+            // ventasToolStripMenuItem
+            // 
+            this.ventasToolStripMenuItem.Name = "ventasToolStripMenuItem";
+            this.ventasToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.ventasToolStripMenuItem.Text = "Ventas";
+            this.ventasToolStripMenuItem.Click += new System.EventHandler(this.menuVentas_Click);
+            // 
+            // stockToolStripMenuItem
+            // 
+            this.stockToolStripMenuItem.Name = "stockToolStripMenuItem";
+            this.stockToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.stockToolStripMenuItem.Text = "Stock";
+            this.stockToolStripMenuItem.Click += new System.EventHandler(this.menuStock_Click);
+            // 
+            // proveedoresToolStripMenuItem
+            // 
+            this.proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
+            this.proveedoresToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.proveedoresToolStripMenuItem.Text = "Proveedores";
+            this.proveedoresToolStripMenuItem.Click += new System.EventHandler(this.menuProveedores_Click);
+            // 
+            // categoriasToolStripMenuItem
+            // 
+            this.categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
+            this.categoriasToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.categoriasToolStripMenuItem.Text = "Categorías";
+            this.categoriasToolStripMenuItem.Click += new System.EventHandler(this.menuCategorias_Click);
+            // 
+            // informesToolStripMenuItem
+            // 
+            this.informesToolStripMenuItem.Name = "informesToolStripMenuItem";
+            this.informesToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.informesToolStripMenuItem.Text = "Informes";
+            this.informesToolStripMenuItem.Click += new System.EventHandler(this.menuInformes_Click);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(48, 48);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonRegistros,
+            this.toolStripButtonVentas,
+            this.toolStripButtonStock,
+            this.toolStripButtonProveedores,
+            this.toolStripButtonCompras,
+            this.toolStripButtonCategorias,
+            this.toolStripButtonInformes});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 56);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonRegistros
+            // 
+            this.toolStripButtonRegistros.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonRegistros.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRegistros.Name = "toolStripButtonRegistros";
+            this.toolStripButtonRegistros.Size = new System.Drawing.Size(70, 53);
+            this.toolStripButtonRegistros.Text = "Registros";
+            this.toolStripButtonRegistros.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonRegistros.Click += new System.EventHandler(this.menuRegistros_Click);
+            // 
+            // toolStripButtonVentas
+            // 
+            this.toolStripButtonVentas.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonVentas.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonVentas.Name = "toolStripButtonVentas";
+            this.toolStripButtonVentas.Size = new System.Drawing.Size(70, 53);
+            this.toolStripButtonVentas.Text = "Ventas";
+            this.toolStripButtonVentas.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonVentas.Click += new System.EventHandler(this.menuVentas_Click);
+            // 
+            // toolStripButtonStock
+            // 
+            this.toolStripButtonStock.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonStock.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonStock.Name = "toolStripButtonStock";
+            this.toolStripButtonStock.Size = new System.Drawing.Size(70, 53);
+            this.toolStripButtonStock.Text = "Stock";
+            this.toolStripButtonStock.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonStock.Click += new System.EventHandler(this.menuStock_Click);
+            // 
+            // toolStripButtonProveedores
+            // 
+            this.toolStripButtonProveedores.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonProveedores.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonProveedores.Name = "toolStripButtonProveedores";
+            this.toolStripButtonProveedores.Size = new System.Drawing.Size(90, 53);
+            this.toolStripButtonProveedores.Text = "Proveedores";
+            this.toolStripButtonProveedores.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonProveedores.Click += new System.EventHandler(this.menuProveedores_Click);
+            // 
+            // toolStripButtonCompras
+            // 
+            this.toolStripButtonCompras.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonCompras.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCompras.Name = "toolStripButtonCompras";
+            this.toolStripButtonCompras.Size = new System.Drawing.Size(70, 53);
+            this.toolStripButtonCompras.Text = "Compras";
+            this.toolStripButtonCompras.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonCompras.Click += new System.EventHandler(this.menuCompras_Click);
+            // 
+            // toolStripButtonCategorias
+            // 
+            this.toolStripButtonCategorias.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripButtonCategorias.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCategorias.Name = "toolStripButtonCategorias";
+            this.toolStripButtonCategorias.Size = new System.Drawing.Size(80, 53);
+            this.toolStripButtonCategorias.Text = "Categorías";
+            this.toolStripButtonCategorias.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonCategorias.Click += new System.EventHandler(this.menuCategorias_Click);
+            // 
+            // toolStripButtonInformes
+            // 
+            this.toolStripButtonInformes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonInformes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonInformes.Name = "toolStripButtonInformes";
+            this.toolStripButtonInformes.Size = new System.Drawing.Size(54, 53);
+            this.toolStripButtonInformes.Text = "Informes";
+            this.toolStripButtonInformes.Click += new System.EventHandler(this.menuInformes_Click);
             // 
             // lbProducto
             // 
@@ -255,7 +423,11 @@
             // add the table layout into the product tab
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPageProduct.Controls.Add(this.tlpMain);
+            // add menu and toolstrip and main tab control
             this.Controls.Add(this.tabMain);
+            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
             this.MinimumSize = new System.Drawing.Size(600, 360);
             this.Name = "frmPrincipal";
@@ -327,6 +499,22 @@
         private System.Windows.Forms.Button btnCategorias;
         private System.Windows.Forms.Button btnVer;
         private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem registrosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ventasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stockToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem proveedoresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem comprasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem categoriasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem informesToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRegistros;
+        private System.Windows.Forms.ToolStripButton toolStripButtonVentas;
+        private System.Windows.Forms.ToolStripButton toolStripButtonStock;
+        private System.Windows.Forms.ToolStripButton toolStripButtonProveedores;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCompras;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCategorias;
+        private System.Windows.Forms.ToolStripButton toolStripButtonInformes;
         private System.Windows.Forms.ErrorProvider errorProvider1;
 
         #endregion

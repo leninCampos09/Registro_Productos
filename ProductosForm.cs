@@ -55,7 +55,8 @@ namespace Registro_Productos
 
         private void BtnNuevo_Click(object? sender, EventArgs e)
         {
-            using var f = new frmPrincipal();
+            // Abrir el formulario de producto en modo "solo producto" (muestra la pestaña de creación)
+            using var f = new frmPrincipal(true);
             f.ShowDialog();
             LoadProducts();
         }

@@ -1,0 +1,31 @@
+-- Migration: Crear tablas InformesVentas e InformesCompras
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'app')
+BEGIN
+	EXEC('CREATE SCHEMA app');
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'app' AND TABLE_NAME = 'InformesVentas')
+BEGIN
+	CREATE TABLE app.InformesVentas (
+		Id INT IDENTITY(1,1) PRIMARY KEY,
+		FechaGeneracion DATETIME2 NOT NULL,
+		PeriodoInicio DATETIME2 NULL,
+		PeriodoFin DATETIME2 NULL,
+		TotalVentas DECIMAL(18,2) NULL,
+		TotalItems INT NULL,
+		ReportData NVARCHAR(MAX) NULL
+	);
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'app' AND TABLE_NAME = 'InformesCompras')
+BEGIN
+	CREATE TABLE app.InformesCompras (
+		Id INT IDENTITY(1,1) PRIMARY KEY,
+		FechaGeneracion DATETIME2 NOT NULL,
+		PeriodoInicio DATETIME2 NULL,
+		PeriodoFin DATETIME2 NULL,
+		TotalCompras DECIMAL(18,2) NULL,
+		TotalItems INT NULL,
+		ReportData NVARCHAR(MAX) NULL
+	);
+END
