@@ -1,12 +1,14 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Registro_Productos
 {
     public partial class frmPrincipal : Form
     {
+        private bool productOnlyMode = false;
         private int editingId = 0; // 0 => nuevo
         private string currentImagePath = null; // ruta relativa guardada en DB
         private string? tempSelectedFullPath = null; // ruta temporal del archivo seleccionado (antes de guardar)
@@ -15,42 +17,79 @@ namespace Registro_Productos
         private bool shownPrecioAlert = false;
         private bool shownCantidadAlert = false;
 
-        public frmPrincipal()
+        public frmPrincipal(bool showProductTab = false)
         {
             InitializeComponent();
+            // marcar modo solo producto si se solicita
+            this.productOnlyMode = showProductTab;
+            // Si no se solicita la pestaña de producto, eliminarla del TabControl
+            try
+            {
+                if (!showProductTab && this.tabMain != null && this.tabPageProduct != null)
+                {
+                    this.tabMain.Controls.Remove(this.tabPageProduct);
+                }
+            }
+            catch { }
+            try { SetupMenuIcons(); } catch { }
             AttachEvents();
             LoadCategories();
             // Embebar formularios de Productos y Categorías dentro de la pestaña Administración
             try
             {
-                var prodForm = new ProductosForm() { TopLevel = false, FormBorderStyle = FormBorderStyle.None, Dock = DockStyle.Fill };
-                var catForm = new CategoriesForm() { TopLevel = false, FormBorderStyle = FormBorderStyle.None, Dock = DockStyle.Fill };
+                if (!this.productOnlyMode)
+                {
+                    var prodForm = new ProductosForm() { TopLevel = false, FormBorderStyle = FormBorderStyle.None, Dock = DockStyle.Fill };
+                    var catForm = new CategoriesForm() { TopLevel = false, FormBorderStyle = FormBorderStyle.None, Dock = DockStyle.Fill };
 
-                var adminTabs = new TabControl { Dock = DockStyle.Fill };
-                var tpProducts = new TabPage("Productos");
-                var tpCategories = new TabPage("Categorías");
-                adminTabs.TabPages.Add(tpProducts);
-                adminTabs.TabPages.Add(tpCategories);
+                    var adminTabs = new TabControl { Dock = DockStyle.Fill };
+                    var tpProducts = new TabPage("Productos");
+                    var tpCategories = new TabPage("Categorías");
+                    adminTabs.TabPages.Add(tpProducts);
+                    adminTabs.TabPages.Add(tpCategories);
 
-                tpProducts.Controls.Add(prodForm);
-                tpCategories.Controls.Add(catForm);
+                    tpProducts.Controls.Add(prodForm);
+                    tpCategories.Controls.Add(catForm);
 
-                // Recargar categorías al cambiar de pestaña para asegurar que los combos siempre tengan datos
-                adminTabs.SelectedIndexChanged += (s, e) => {
-                    try
+                    // Recargar categorías al cambiar de pestaña para asegurar que los combos siempre tengan datos
+                    adminTabs.SelectedIndexChanged += (s, e) => {
+                        try
+                        {
+                            if (adminTabs.SelectedIndex == 0)
+                                prodForm.LoadCategories();
+                            else
+                                catForm.LoadCategories();
+                        }
+                        catch { }
+                    };
+
+                    this.tabPageAdmin.Controls.Add(adminTabs);
+
+                    prodForm.Show();
+                    catForm.Show();
+                }
+            }
+            catch { }
+
+            // Si estamos en modo solo producto, ocultar menú, toolbar y mostrar solo el layout de producto
+            try
+            {
+                if (this.productOnlyMode)
+                {
+                    if (this.menuStrip1 != null) this.menuStrip1.Visible = false;
+                    if (this.toolStrip1 != null) this.toolStrip1.Visible = false;
+
+                    // Mover tlpMain fuera de la pestaña y añadirlo directamente al formulario
+                    if (this.tabPageProduct != null && this.tlpMain != null)
                     {
-                        if (adminTabs.SelectedIndex == 0)
-                            prodForm.LoadCategories();
-                        else
-                            catForm.LoadCategories();
+                        try { this.tabPageProduct.Controls.Remove(this.tlpMain); } catch { }
+                        this.Controls.Add(this.tlpMain);
+                        this.tlpMain.Dock = DockStyle.Fill;
                     }
-                    catch { }
-                };
 
-                this.tabPageAdmin.Controls.Add(adminTabs);
-
-                prodForm.Show();
-                catForm.Show();
+                    // Eliminar control tabMain para que no se muestre
+                    try { if (this.tabMain != null) this.Controls.Remove(this.tabMain); } catch { }
+                }
             }
             catch { }
             // colocar icono de foto por defecto en el PictureBox si no hay imagen seleccionada
@@ -115,6 +154,75 @@ namespace Registro_Productos
                 }
             }
             return bmp;
+        }
+
+        // Handlers para menú/toolbar
+        private void menuVentas_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                new VentasForm() { StartPosition = FormStartPosition.CenterParent }.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo abrir Ventas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void menuStock_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // Seleccionar la pestaña Administración en el TabControl principal
+                if (this.tabMain != null && this.tabPageAdmin != null)
+                    this.tabMain.SelectedTab = this.tabPageAdmin;
+
+                // Buscar el TabControl embebido dentro de tabPageAdmin y seleccionar la pestaña "Productos" (índice 0)
+                var adminTabs = this.tabPageAdmin?.Controls.OfType<TabControl>().FirstOrDefault();
+                if (adminTabs != null && adminTabs.TabCount > 0)
+                    adminTabs.SelectedIndex = 0; // muestra el UserControl/Product form embebido
+            }
+            catch { }
+        }
+
+        private void menuProveedores_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                new ProveedoresForm() { StartPosition = FormStartPosition.CenterParent }.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo abrir Proveedores: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void menuCategorias_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // Seleccionar la pestaña Administración en el TabControl principal
+                if (this.tabMain != null && this.tabPageAdmin != null)
+                    this.tabMain.SelectedTab = this.tabPageAdmin;
+
+                // Buscar el TabControl embebido dentro de tabPageAdmin y seleccionar la pestaña "Categorías" (índice 1)
+                var adminTabs = this.tabPageAdmin?.Controls.OfType<TabControl>().FirstOrDefault();
+                if (adminTabs != null && adminTabs.TabCount > 1)
+                    adminTabs.SelectedIndex = 1; // muestra la pestaña Categorías embebida
+            }
+            catch { }
+        }
+
+        private void menuInformes_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                new InformesForm() { StartPosition = FormStartPosition.CenterParent }.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo abrir Informes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // KeyPress handlers para validar entrada en tiempo real
@@ -188,7 +296,7 @@ namespace Registro_Productos
         }
 
         // Constructor para editar
-        public frmPrincipal(int id) : this()
+        public frmPrincipal(int id) : this(true)
         {
             LoadProductForEdit(id);
         }
@@ -436,6 +544,153 @@ namespace Registro_Productos
 
             // Colocar foco en el primer campo
             try { txtProducto.Focus(); } catch { }
+        }
+
+        // Crea iconos simples (placeholders) y los asigna a los items del MenuStrip/ToolStrip
+        private void SetupMenuIcons()
+        {
+            try { this.toolStrip1.ImageScalingSize = new System.Drawing.Size(48, 48); } catch { }
+
+            // Intentar cargar imágenes desde la carpeta "images" del proyecto (ruta relativa desde el output).
+            string[] candidateNames = new string[] { "registros.png", "ventas.png", "stock.png", "proveedor.png", "compras.png", "categorias.png", "informes.png" };
+            var icons = new System.Collections.Generic.Dictionary<string, Image>(StringComparer.OrdinalIgnoreCase);
+            icons["registros"] = LoadProjectImage("registros.png") ?? CreateIconBitmap("R", Color.FromArgb(86, 173, 85));
+            icons["ventas"] = LoadProjectImage("ventas.png") ?? CreateIconBitmap("V", Color.FromArgb(0, 120, 215));
+            icons["stock"] = LoadProjectImage("stock.png") ?? CreateIconBitmap("S", Color.FromArgb(255, 165, 0));
+            icons["proveedores"] = LoadProjectImage("proveedor.png") ?? CreateIconBitmap("P", Color.FromArgb(155, 89, 182));
+            icons["compras"] = LoadProjectImage("compras.png") ?? CreateIconBitmap("Co", Color.FromArgb(120, 120, 200));
+            icons["categorias"] = LoadProjectImage("categorias.png") ?? CreateIconBitmap("C", Color.FromArgb(52, 152, 219));
+            icons["informes"] = LoadProjectImage("informes.png") ?? CreateIconBitmap("I", Color.FromArgb(26, 188, 156));
+
+            try
+            {
+                if (this.registrosToolStripMenuItem != null) this.registrosToolStripMenuItem.Image = icons["registros"];
+                if (this.ventasToolStripMenuItem != null) this.ventasToolStripMenuItem.Image = icons["ventas"];
+                if (this.stockToolStripMenuItem != null) this.stockToolStripMenuItem.Image = icons["stock"];
+                if (this.proveedoresToolStripMenuItem != null) this.proveedoresToolStripMenuItem.Image = icons["proveedores"];
+                if (this.comprasToolStripMenuItem != null) this.comprasToolStripMenuItem.Image = icons["compras"];
+                if (this.categoriasToolStripMenuItem != null) this.categoriasToolStripMenuItem.Image = icons["categorias"];
+                if (this.informesToolStripMenuItem != null) this.informesToolStripMenuItem.Image = icons["informes"];
+            }
+            catch { }
+
+            try
+            {
+                if (this.toolStripButtonRegistros != null)
+                {
+                    this.toolStripButtonRegistros.Image = icons["registros"];
+                    this.toolStripButtonRegistros.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                    this.toolStripButtonRegistros.TextImageRelation = TextImageRelation.ImageAboveText;
+                }
+                if (this.toolStripButtonInformes != null)
+                {
+                    this.toolStripButtonInformes.Image = icons["informes"];
+                    this.toolStripButtonInformes.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                    this.toolStripButtonInformes.TextImageRelation = TextImageRelation.ImageAboveText;
+                }
+                try { if (this.toolStripButtonVentas != null) this.toolStripButtonVentas.Image = icons["ventas"]; } catch { }
+                try { if (this.toolStripButtonStock != null) this.toolStripButtonStock.Image = icons["stock"]; } catch { }
+                try { if (this.toolStripButtonProveedores != null) this.toolStripButtonProveedores.Image = icons["proveedores"]; } catch { }
+                try { if (this.toolStripButtonCompras != null) this.toolStripButtonCompras.Image = icons["compras"]; } catch { }
+                try { if (this.toolStripButtonCategorias != null) this.toolStripButtonCategorias.Image = icons["categorias"]; } catch { }
+            }
+            catch { }
+        }
+
+        private void menuCompras_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // Si existe un formulario ComprasForm lo abrimos, si no, abrimos Proveedores como alternativa
+                // Abrir el listado de compras (si existe) para ver los registros guardados
+                var t = typeof(frmPrincipal).Assembly.GetType("Registro_Productos.ComprasListForm");
+                if (t != null && typeof(Form).IsAssignableFrom(t))
+                {
+                    var frm = (Form)Activator.CreateInstance(t)!;
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.Show();
+                }
+                else
+                {
+                    // Fallback: abrir el formulario de creación de compras
+                    var t2 = typeof(frmPrincipal).Assembly.GetType("Registro_Productos.ComprasForm");
+                    if (t2 != null && typeof(Form).IsAssignableFrom(t2))
+                    {
+                        var frm2 = (Form)Activator.CreateInstance(t2)!;
+                        frm2.StartPosition = FormStartPosition.CenterParent;
+                        frm2.Show();
+                    }
+                    else
+                    {
+                        new ProveedoresForm() { StartPosition = FormStartPosition.CenterParent }.Show();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo abrir Compras: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Al pulsar el botón principal "Registros" seleccionamos la pestaña Administración
+        private void menuRegistros_Click(object? sender, EventArgs e)
+        {
+            try { if (this.tabMain != null && this.tabPageAdmin != null) this.tabMain.SelectedTab = this.tabPageAdmin; } catch { }
+        }
+
+        private Image LoadProjectImage(string fileName)
+        {
+            try
+            {
+                // Rutas candidatas desde el output (bin) hacia la carpeta del proyecto
+                var outDir = Application.StartupPath; // e.g. ...\bin\Debug\net10.0-windows
+                var pathsToTry = new string[] {
+                    Path.Combine(outDir, "images", fileName),
+                    Path.Combine(outDir, "..", "..", "..", "images", fileName),
+                    Path.Combine(outDir, "..", "..", "images", fileName),
+                    Path.Combine(Directory.GetCurrentDirectory(), "images", fileName),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", fileName)
+                };
+                foreach (var p in pathsToTry)
+                {
+                    try
+                    {
+                        var full = Path.GetFullPath(p);
+                        if (File.Exists(full))
+                        {
+                            using var fs = new FileStream(full, FileMode.Open, FileAccess.Read);
+                            var img = Image.FromStream(fs);
+                            return new Bitmap(img);
+                        }
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        private Image CreateIconBitmap(string letter, Color bg)
+        {
+            int size = 48;
+            var bmp = new Bitmap(size, size);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.Clear(Color.Transparent);
+                using (var b = new SolidBrush(bg))
+                    g.FillEllipse(b, 0, 0, size - 1, size - 1);
+                using (var p = new Pen(Color.FromArgb(200, 200, 200), 2))
+                    g.DrawEllipse(p, 1, 1, size - 3, size - 3);
+                using (var f = new Font("Segoe UI", 18, FontStyle.Bold, GraphicsUnit.Pixel))
+                using (var sb = new SolidBrush(Color.White))
+                {
+                    var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                    g.DrawString(letter, f, sb, new RectangleF(0, 0, size, size), sf);
+                }
+            }
+            return bmp;
         }
     }
 }
